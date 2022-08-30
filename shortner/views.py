@@ -10,7 +10,10 @@ def index(request):
 def create(request):
     if request.method == 'POST':
         link = request.POST['link']
-        uid = str(uuid.uuid4())[:5]
+        # still can process even just word without http.link.com
+        if ("http://www" not in link) and ("https://www" not in link) :
+            link = "http://www." + link + ".com"
+        uid = str(uuid.uuid4())[:3] # give output 3 letter uid
         new_url = Url(link=link,uuid=uid)
         new_url.save()
         return HttpResponse(uid)
